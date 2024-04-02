@@ -9,15 +9,18 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ApplicationDbContext>(
-    options => options.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
+	options => options.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
+
+builder.Services.AddStackExchangeRedisCache(option => 
+option.Configuration = builder.Configuration.GetConnectionString("Cache"));
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    app.ApplyMigrations();
+	app.UseSwagger();
+	app.UseSwaggerUI();
+	app.ApplyMigrations();
 }
 
 app.MapProductEndpoints();
